@@ -20,6 +20,7 @@ scene = bpy.context.scene
 for _n in ("CIRCUIT_ENV", "VISOR"):
     _o = bpy.data.objects.get(_n)
     if _o: bpy.data.objects.remove(_o, do_unlink=True)
+exec(open("C:/Users/Internet/Desktop/TEST COMFYUI/scripts/antenna_cut.py").read())
 if end: scene.frame_end = end
 if arg('--start', None, int): scene.frame_start = arg('--start', 1, int)
 if spin: wheel_spin.apply(scene, spin)

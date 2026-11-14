@@ -35,6 +35,7 @@ MBLK, MRED, MBLU, MGRN = emit("P_BLACK", (0, 0, 0)), emit("P_RED", (1, 0, 0)), e
 
 for o in list(scene.objects):
     if o.name in ("NurbsPath.001", "Plane", "PROXY_CITY") or o.name.startswith("VISOR"): o.hide_render = True
+exec(open("C:/Users/Internet/Desktop/TEST COMFYUI/scripts/antenna_cut.py").read())
 car = bpy.data.objects["f1_2026_sf26"]; me = car.data
 names = [m.name if m else "" for m in me.materials]
 idx = []
