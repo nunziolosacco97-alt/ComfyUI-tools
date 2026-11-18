@@ -1,0 +1,28 @@
+"""Pruna P-H3-Image (template image_p_h3_image_edit): MiniMax H3 backbone + p-h3-image LoRA/text encoder/VAE, 8 steps, no CFG. Prompt upsampler skipped. args: seed"""
+import sys, os, time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from cx import *
+seed = int(sys.argv[1]) if len(sys.argv) > 1 else 7
+M = os.path.join(SH, "models")
+need = [os.path.join(M, "text_encoders", "p-h3-image_text_encoder_int8_convrot.safetensors"), os.path.join(M, "vae", "p-h3-image_vae_int8_convrot.safetensors"), os.path.join(M, "loras", "p-h3-image_lora_bf16.safetensors")]
+while not all(os.path.exists(p) for p in need): time.sleep(10)
+REQ = ("Aspect ratio: 5:3\nRequest: Turn this grey 3D layout into a real photograph, keeping the exact composition: a papaya orange McLaren 765LT parked on a dark asphalt road, "
+       "a raised light stone sidewalk with one continuous kerb across the foreground, three tall stone columns, warm low sun with long shadows, and a real woman in a long dark wool coat and heeled ankle boots walking to the right in profile on the sidewalk.")
+g = {
+ "1": {"class_type": "UNETLoader", "inputs": {"unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors", "weight_dtype": "default"}},
+ "19": {"class_type": "LoraLoaderModelOnly", "inputs": {"model": ["1", 0], "lora_name": "p-h3-image_lora_bf16.safetensors", "strength_model": 1.0}},
+ "18": {"class_type": "MiniMaxH3SigmaShift", "inputs": {"model": ["19", 0], "shift_video": 1.0, "shift_audio": 1.0}},
+ "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "p-h3-image_text_encoder_int8_convrot.safetensors", "type": "minimax", "device": "default"}},
+ "3": {"class_type": "VAELoader", "inputs": {"vae_name": "p-h3-image_vae_int8_convrot.safetensors"}},
+ "26": {"class_type": "LoadImage", "inputs": {"image": INF + "/beauty_clay.png"}},
+ "6": {"class_type": "ImageScaleToTotalPixels", "inputs": {"image": ["26", 0], "upscale_method": "lanczos", "megapixels": 0.95, "resolution_steps": 32}},
+ "9": {"class_type": "PH3ImageConditioning", "inputs": {"clip": ["2", 0], "prompt": REQ, "width": 0, "height": 0, "vae": ["3", 0], "images.image_1": ["6", 0]}},
+ "10": {"class_type": "BasicGuider", "inputs": {"model": ["18", 0], "conditioning": ["9", 0]}},
+ "11": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "er_sde"}},
+ "12": {"class_type": "RandomNoise", "inputs": {"noise_seed": seed}},
+ "13": {"class_type": "ManualSigmas", "inputs": {"sigmas": "1.0, 0.984753, 0.967905, 0.951688, 0.925372, 0.881923, 0.810083, 0.528718, 0.0"}},
+ "14": {"class_type": "SamplerCustomAdvanced", "inputs": {"noise": ["12", 0], "guider": ["10", 0], "sampler": ["11", 0], "sigmas": ["13", 0], "latent_image": ["9", 1]}},
+ "15": {"class_type": "VAEDecode", "inputs": {"samples": ["14", 0], "vae": ["3", 0]}},
+ "16": {"class_type": "SaveImage", "inputs": {"images": ["15", 0], "filename_prefix": "mcl/ph3"}},
+}
+run(g, "ph3image_v7_s%d" % seed)

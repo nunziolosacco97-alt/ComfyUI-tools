@@ -1,0 +1,14 @@
+<section id="z1">
+<p class="eyebrow">Finalista 1 · guida: profondità (ControlNet)</p>
+<h2>Z-Image Turbo: lo schema</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Carica i modelli</p><p class="c">UNETLoader · CLIPLoader · VAELoader</p><p class="d">z_image_turbo, qwen_3_4b (testo), ae (VAE)</p></div>
+<div class="node"><p class="t">2 · Regola il Turbo</p><p class="c">ModelSamplingAuraFlow</p><p class="d">shift 3: come scende il rumore</p></div>
+<div class="node"><p class="t">3 · Guida: profondità</p><p class="c">ModelPatchLoader · LoadImage · ZImageFunControlnet</p><p class="d">depth.png, forza 0.8, fino all’80%</p></div>
+<div class="node"><p class="t">4 · Testo</p><p class="c">CLIPTextEncode · ConditioningZeroOut</p><p class="d">prompt positivo; negativo azzerato (cfg 1)</p></div>
+<div class="node"><p class="t">5 · Tela di partenza</p><p class="c">EmptySD3LatentImage</p><p class="d">latente vuoto 1280×768</p></div>
+<div class="node"><p class="t">6 · Campiona e salva</p><p class="c">KSampler · VAEDecode · SaveImage</p><p class="d">8 passi, cfg 1, euler/simple, ~30 s</p></div>
+</div>
+<div class="callout"><p class="ct">Il più semplice dei cinque: il punto giusto da cui cominciare a studiare.</p></div>
+<aside>Ordine di lettura: 1 e 2 preparano il modello, 3 e 4 gli dicono cosa disegnare, 5 e 6 producono e salvano.</aside>
+</section>

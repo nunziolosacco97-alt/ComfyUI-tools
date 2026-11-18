@@ -1,0 +1,121 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_h3_image_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_h3_image_vae_fp16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mcl13/beauty_clay.png"
+    }
+  },
+  "5": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "4",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 1920,
+      "height": 1152,
+      "crop": "disabled"
+    }
+  },
+  "6": {
+    "class_type": "MiniMaxH3ImageConditioning",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "prompt": "Picture 1 is a grey 3D clay layout of the scene. Turn it into a real photograph. Keep the camera angle, the position and shape of the car, the position of the pedestrian and the direction of the sun shadows. The pedestrian is a real woman walking in profile, face visible, looking where she walks. The pedestrian walks on the raised sidewalk, her body, feet and face all pointing the same way she walks (toes forward). She wears elegant women's ankle boots with a slim heel, not men's shoes. The car paint is softly lit with low contrast, gentle highlights, no harsh speculars and no strong light reflections on the ground. Photorealistic automotive advertising photograph: a papaya orange McLaren 765LT supercar parked on a dark asphalt road in front of a monumental modern stone colonnade building with exactly three tall square stone columns standing on low plinths and supporting one continuous heavy cornice, dark glazed shopfronts recessed behind the columns. A raised light stone sidewalk runs continuously along the whole foreground, separated from the road by one continuous straight kerb, and another sidewalk runs along the building behind the car. Low warm late-afternoon sun from behind-left casting long hard shadows across the pavement, deep contrast between sunlit and shaded areas, in the right foreground a real human woman in a long dark wool coat walks past in profile, with natural hair and skin, slightly motion blurred, shallow depth of field, cinematic commercial car photography, 50mm lens, natural reflections in the paint and glass, subtle film grain, high detail",
+      "width": 1920,
+      "height": 1152,
+      "vae": [
+        "3",
+        0
+      ],
+      "images.image_1": [
+        "5",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "6",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "6",
+        1
+      ],
+      "seed": 7,
+      "steps": 6,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "mcl/h3img"
+    }
+  }
+}

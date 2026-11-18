@@ -1,0 +1,14 @@
+<section id="m1">
+<p class="eyebrow">Finalista 4 · guida: profondità + LoRA</p>
+<h2>MOSS-Image: lo schema</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Carica i modelli</p><p class="c">UNETLoader · CLIPLoader · VAELoader</p><p class="d">moss_image_sft, qwen3.5_9b, flux2-vae_small</p></div>
+<div class="node"><p class="t">2 · LoRA di controllo</p><p class="c">LoraLoaderModelOnly</p><p class="d">moss_image_color_depth_control</p></div>
+<div class="node"><p class="t">3 · Ritocchi al modello</p><p class="c">ModelSamplingAuraFlow · SkipLayerGuidanceDiTSimple</p><p class="d">impostazioni del template ufficiale (+ TemporalScoreRescaling)</p></div>
+<div class="node"><p class="t">4 · Testo (+ e −)</p><p class="c">CLIPTextEncode × 2</p><p class="d">positivo e negativo: qui il negativo conta</p></div>
+<div class="node"><p class="t">5 · Guida: profondità</p><p class="c">LoadImage · MOSSImageControl</p><p class="d">depth.png, forza 1.0, fino al 60%</p></div>
+<div class="node"><p class="t">6 · Campiona e salva</p><p class="c">SamplerCustom · VAEDecode · SaveImage</p><p class="d">25 passi, cfg 3, ER-SDE, 1280×768</p></div>
+</div>
+<div class="callout"><p class="ct">Fa 25 passi invece di 6–8 e usa un vero prompt negativo.</p></div>
+<aside>Rispetto a Z-Image è simile come idea (profondità), ma ha due prompt, un LoRA e molti più passi. La tela di partenza è un EmptyLatentImage.</aside>
+</section>

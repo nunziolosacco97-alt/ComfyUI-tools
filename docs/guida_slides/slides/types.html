@@ -1,0 +1,13 @@
+<section id="types">
+<p class="eyebrow">Le basi</p>
+<h2>I 6 tipi di nodo che incontrerai sempre</h2>
+<div class="grid3">
+<div class="node"><p class="t">Caricatori</p><p class="c">UNETLoader · CLIPLoader · VAELoader</p><p class="d">Portano in memoria il modello, il lettore di testo e il traduttore dei pixel.</p></div>
+<div class="node"><p class="t">Immagini in ingresso</p><p class="c">LoadImage · ImageScale</p><p class="d">Caricano la nostra passata di Blender e la portano alla misura giusta.</p></div>
+<div class="node"><p class="t">Testo</p><p class="c">CLIPTextEncode</p><p class="d">Trasforma il prompt in numeri che il modello capisce.</p></div>
+<div class="node"><p class="t">Guida</p><p class="c">ControlNet · ReferenceLatent</p><p class="d">Dice al modello: segui questa profondità o questa immagine.</p></div>
+<div class="node"><p class="t">Campionatori</p><p class="c">KSampler · SamplerCustomAdvanced</p><p class="d">Partono dal rumore e lo trasformano in immagine in pochi passi.</p></div>
+<div class="node"><p class="t">Uscita</p><p class="c">VAEDecode · SaveImage</p><p class="d">Traducono il risultato in pixel e salvano il file.</p></div>
+</div>
+<aside>Quando apri un workflow nuovo, prova a dare un tipo a ogni nodo: caricatore, ingresso, testo, guida, campionatore, uscita. Cambiano i nomi, non le funzioni.</aside>
+</section>

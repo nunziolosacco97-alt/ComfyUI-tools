@@ -1,0 +1,12 @@
+<section id="blender" class="dark">
+<p class="eyebrow">Il nostro progetto</p>
+<h2>Cosa riceve ComfyUI da Blender</h2>
+<p class="lead">Blender fa solo bozze: una scena fissa, una camera da 50 mm, 1280×768. I modelli le trasformano in foto.</p>
+<div class="grid2">
+<div class="node"><p class="t">Clay</p><p class="c">forme e luce, tutto grigio</p><p class="d">La guida di H3 Image, P-H3-Image e FLUX.2.</p></div>
+<div class="node"><p class="t">Depth</p><p class="c">profondità: bianco = vicino</p><p class="d">La guida di Z-Image e MOSS (ControlNet).</p></div>
+<div class="node"><p class="t">ID e maschere</p><p class="c">colori piatti per ogni parte</p><p class="d">Servono per correggere o ricomporre l’auto.</p></div>
+<div class="node"><p class="t">Linee e normali</p><p class="c">contorni e orientamento</p><p class="d">Usate nei primi test; le abbiamo tolte quando irrigidivano troppo.</p></div>
+</div>
+<aside>Le passate stanno nella cartella inputs del progetto e vengono copiate nella cartella input di ComfyUI. Nei workflow compaiono come nodi LoadImage (beauty_clay.png, depth.png).</aside>
+</section>

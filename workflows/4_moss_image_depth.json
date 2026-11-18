@@ -1,0 +1,203 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "moss_image_sft_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "3": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3.5_9b_int8_convrot.safetensors",
+      "type": "moss_image",
+      "device": "default"
+    }
+  },
+  "4": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae_small.safetensors"
+    }
+  },
+  "49": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "lora_name": "moss_image_color_depth_control.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "16": {
+    "class_type": "TemporalScoreRescaling",
+    "inputs": {
+      "model": [
+        "49",
+        0
+      ],
+      "tsr_k": 0.95,
+      "tsr_sigma": 1.0
+    }
+  },
+  "36": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": {
+      "model": [
+        "16",
+        0
+      ],
+      "shift": 5.0,
+      "sampling": "flow"
+    }
+  },
+  "2": {
+    "class_type": "SkipLayerGuidanceDiTSimple",
+    "inputs": {
+      "model": [
+        "36",
+        0
+      ],
+      "double_layers": "",
+      "single_layers": "24",
+      "start_percent": 0.0,
+      "end_percent": 1.0
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Photorealistic automotive advertising photograph: a papaya orange McLaren 765LT supercar parked on a dark asphalt road in front of a monumental modern stone colonnade building with exactly three tall square stone columns standing on low plinths and supporting one continuous heavy cornice, dark glazed shopfronts recessed behind the columns. A raised light stone sidewalk runs continuously along the whole foreground, separated from the road by one continuous straight kerb, and another sidewalk runs along the building behind the car. Low warm late-afternoon sun from behind-left casting long hard shadows across the pavement, deep contrast between sunlit and shaded areas, in the right foreground a real human woman in a long dark wool coat walks past in profile wearing elegant women's ankle boots with a slim heel, with natural hair and skin, slightly motion blurred, shallow depth of field, cinematic commercial car photography, 50mm lens, natural reflections in the paint and glass, subtle film grain, high detail",
+      "clip": [
+        "3",
+        0
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "mannequin, statue, silhouette cutout, dress, cartoon, illustration, cgi, 3d render, oversaturated, blurry car, deformed car, extra wheels, text, watermark, logo, low quality, men's shoes, sneakers, flat shoes, mannequin in shopfront, brand sign",
+      "clip": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mcl13/depth.png"
+    }
+  },
+  "53": {
+    "class_type": "MOSSImageControl",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "vae": [
+        "4",
+        0
+      ],
+      "strength": 1.0,
+      "start_percent": 0.0,
+      "end_percent": 0.6,
+      "depth_map": [
+        "10",
+        0
+      ]
+    }
+  },
+  "54": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1280,
+      "height": 768,
+      "batch_size": 1
+    }
+  },
+  "21": {
+    "class_type": "SamplerER_SDE",
+    "inputs": {
+      "solver_type": "ER-SDE",
+      "max_stage": 3,
+      "eta": 1.0,
+      "s_noise": 1.05
+    }
+  },
+  "22": {
+    "class_type": "BasicScheduler",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "scheduler": "simple",
+      "steps": 25,
+      "denoise": 1.0
+    }
+  },
+  "20": {
+    "class_type": "SamplerCustom",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "add_noise": true,
+      "noise_seed": 7,
+      "cfg": 3.0,
+      "positive": [
+        "53",
+        0
+      ],
+      "negative": [
+        "53",
+        1
+      ],
+      "sampler": [
+        "21",
+        0
+      ],
+      "sigmas": [
+        "22",
+        0
+      ],
+      "latent_image": [
+        "54",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "20",
+        0
+      ],
+      "vae": [
+        "4",
+        0
+      ]
+    }
+  },
+  "85": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "mcl/moss"
+    }
+  }
+}

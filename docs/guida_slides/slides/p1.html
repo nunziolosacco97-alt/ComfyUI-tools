@@ -1,0 +1,14 @@
+<section id="p1">
+<p class="eyebrow">Finalista 3 · riferimento + LoRA di Pruna</p>
+<h2>P-H3-Image: lo schema</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Modello base</p><p class="c">UNETLoader</p><p class="d">minimax_h3_fl2va (il modello H3)</p></div>
+<div class="node"><p class="t">2 · LoRA di Pruna</p><p class="c">LoraLoaderModelOnly · MiniMaxH3SigmaShift</p><p class="d">p-h3-image_lora: lo rende un modello per immagini</p></div>
+<div class="node"><p class="t">3 · Testo e VAE</p><p class="c">CLIPLoader · VAELoader</p><p class="d">text encoder e VAE di p-h3-image</p></div>
+<div class="node"><p class="t">4 · Immagine + prompt</p><p class="c">ImageScaleToTotalPixels · PH3ImageConditioning</p><p class="d">clay a 0.95 MP; prompt in due righe</p></div>
+<div class="node"><p class="t">5 · Campionatore</p><p class="c">SamplerCustomAdvanced + ManualSigmas</p><p class="d">er_sde, 8 passi decisi da una lista</p></div>
+<div class="node"><p class="t">6 · Decodifica e salva</p><p class="c">VAEDecode · SaveImage</p><p class="d">immagine con la forma della clay</p></div>
+</div>
+<div class="callout"><p class="ct">Il prompt ha un formato fisso: «Aspect ratio: 5:3» e poi «Request: …».</p></div>
+<aside>LoRA: un piccolo file che si aggiunge a un modello grande per insegnargli un compito nuovo. Qui trasforma H3 (video) in un editor di immagini.</aside>
+</section>

@@ -1,0 +1,14 @@
+<section id="f1">
+<p class="eyebrow">Finalista 5 · riferimento (ReferenceLatent) + Turbo LoRA</p>
+<h2>FLUX.2 [dev]: lo schema</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Carica i modelli</p><p class="c">UNETLoader · CLIPLoader · VAELoader</p><p class="d">flux2_dev_fp8mixed, mistral_3_small (fp8), flux2-vae</p></div>
+<div class="node"><p class="t">2 · Turbo LoRA</p><p class="c">LoraLoaderModelOnly</p><p class="d">Flux2TurboComfyv2: 8 passi invece di 20</p></div>
+<div class="node"><p class="t">3 · Immagine guida</p><p class="c">LoadImage · ImageScaleToTotalPixels · VAEEncode</p><p class="d">clay a 1 MP e convertita in latente</p></div>
+<div class="node"><p class="t">4 · Testo</p><p class="c">CLIPTextEncode · FluxGuidance</p><p class="d">«Edit the reference image…», guidance 4.0</p></div>
+<div class="node"><p class="t">5 · Riferimento</p><p class="c">ReferenceLatent</p><p class="d">dice al modello: modifica questa immagine</p></div>
+<div class="node"><p class="t">6 · Campiona e salva</p><p class="c">Flux2Scheduler · SamplerCustomAdvanced · VAEDecode</p><p class="d">euler, 8 passi, ~190–205 s</p></div>
+</div>
+<div class="callout"><p class="ct">FLUX.2 non ha un negativo: i divieti si scrivono in positivo («nessun manichino»).</p></div>
+<aside>La tela di partenza è un EmptyFlux2LatentImage 1280×768. Il guider è un BasicGuider e il sampler è euler.</aside>
+</section>

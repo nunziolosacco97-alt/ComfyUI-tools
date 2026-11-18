@@ -1,0 +1,14 @@
+<section id="h1">
+<p class="eyebrow">Finalista 2 · guida: immagine di riferimento</p>
+<h2>H3 Image: lo schema</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Carica i modelli</p><p class="c">UNETLoader · CLIPLoader · VAELoader</p><p class="d">h3_image (int8), qwen3vl_32b, h3_image_vae</p></div>
+<div class="node"><p class="t">2 · Immagine guida</p><p class="c">LoadImage · ImageScale</p><p class="d">beauty_clay portata a 1920×1152</p></div>
+<div class="node"><p class="t">3 · Testo + immagine</p><p class="c">MiniMaxH3ImageConditioning</p><p class="d">prompt «Picture 1 è il layout 3D…» + image_1</p></div>
+<div class="node"><p class="t">4 · Negativo</p><p class="c">ConditioningZeroOut</p><p class="d">copia azzerata del positivo (cfg 1)</p></div>
+<div class="node"><p class="t">5 · Campionatore</p><p class="c">KSampler</p><p class="d">6 passi, cfg 1, euler / simple</p></div>
+<div class="node"><p class="t">6 · Decodifica e salva</p><p class="c">VAEDecode · SaveImage</p><p class="d">immagine finale 1920×1152</p></div>
+</div>
+<div class="callout"><p class="ct">Il prompt dice cosa tenere (camera, auto, pedone) e cosa cambiare (da render a foto).</p></div>
+<aside>Nel nodo 3 l’immagine entra come image_1: nel prompt la chiamiamo «Picture 1». Se aggiungi un secondo riferimento diventa image_2 («Picture 2»).</aside>
+</section>

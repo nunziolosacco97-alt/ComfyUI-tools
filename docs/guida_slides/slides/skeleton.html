@@ -1,0 +1,14 @@
+<section id="skeleton">
+<p class="eyebrow">Le basi</p>
+<h2>Lo scheletro: ogni workflow fa queste 6 cose</h2>
+<div class="grid3">
+<div class="node"><p class="t">1 · Carica</p><p class="d">I modelli: quello che disegna, quello che legge il testo, il traduttore dei pixel (VAE).</p></div>
+<div class="node"><p class="t">2 · Prepara</p><p class="d">Il prompt e le immagini guida, come la clay o la profondità di Blender.</p></div>
+<div class="node"><p class="t">3 · Parti da zero</p><p class="d">Una tela vuota (latente) della misura voluta, oppure l’immagine guida.</p></div>
+<div class="node"><p class="t">4 · Campiona</p><p class="d">Il campionatore toglie rumore passo dopo passo, guidato dal prompt.</p></div>
+<div class="node"><p class="t">5 · Decodifica</p><p class="d">Il VAE traduce il risultato interno in pixel veri.</p></div>
+<div class="node"><p class="t">6 · Salva</p><p class="d">SaveImage scrive il PNG nella cartella output.</p></div>
+</div>
+<div class="callout"><p class="ct">I nomi dei nodi cambiano da modello a modello, la sequenza resta questa.</p></div>
+<aside>Latente: lo spazio interno in cui lavora il modello. Non è un’immagine, è una versione compressa; il VAE la converte in pixel solo alla fine.</aside>
+</section>

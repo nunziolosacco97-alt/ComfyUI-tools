@@ -1,0 +1,187 @@
+{
+  "12": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux2_dev_fp8mixed.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "38": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "mistral_3_small_flux2_fp8.safetensors",
+      "type": "flux2",
+      "device": "default"
+    }
+  },
+  "10": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "45": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "mcl13/beauty_clay.png"
+    }
+  },
+  "41": {
+    "class_type": "ImageScaleToTotalPixels",
+    "inputs": {
+      "image": [
+        "45",
+        0
+      ],
+      "upscale_method": "area",
+      "megapixels": 1.0,
+      "resolution_steps": 1
+    }
+  },
+  "40": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "41",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "38",
+        0
+      ],
+      "text": "Edit the reference image: it is a grey 3D clay layout; turn it into a real photograph. Keep the exact camera angle, the position and shape of the car, the road, the raised sidewalk with its continuous kerb, the three stone columns, the pedestrian position and the direction of the sun shadows. The pedestrian is a real woman walking to the right in profile, wearing a long dark wool coat and elegant women's ankle boots with a slim heel. The shopfronts are plain dark glass with warm lit interiors and nothing displayed in them: no mannequins, no signs, no text, no logos, no brand names anywhere. The road is one single dark asphalt surface without extra strips. Photorealistic automotive advertising photograph: a papaya orange McLaren 765LT supercar parked on a dark asphalt road in front of a monumental modern stone colonnade building with exactly three tall square stone columns standing on low plinths and supporting one continuous heavy cornice, dark glazed shopfronts recessed behind the columns. A raised light stone sidewalk runs continuously along the whole foreground, separated from the road by one continuous straight kerb, and another sidewalk runs along the building behind the car. Low warm late-afternoon sun from behind-left casting long hard shadows across the pavement, deep contrast between sunlit and shaded areas, in the right foreground a real human woman in a long dark wool coat walks past in profile, with natural hair and skin, slightly motion blurred, shallow depth of field, cinematic commercial car photography, 50mm lens, natural reflections in the paint and glass, subtle film grain, high detail"
+    }
+  },
+  "26": {
+    "class_type": "FluxGuidance",
+    "inputs": {
+      "conditioning": [
+        "6",
+        0
+      ],
+      "guidance": 4.0
+    }
+  },
+  "39": {
+    "class_type": "ReferenceLatent",
+    "inputs": {
+      "conditioning": [
+        "26",
+        0
+      ],
+      "latent": [
+        "40",
+        0
+      ]
+    }
+  },
+  "47": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": {
+      "width": 1280,
+      "height": 768,
+      "batch_size": 1
+    }
+  },
+  "16": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "25": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 7
+    }
+  },
+  "88": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "12",
+        0
+      ],
+      "lora_name": "Flux2TurboComfyv2.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "22": {
+    "class_type": "BasicGuider",
+    "inputs": {
+      "model": [
+        "88",
+        0
+      ],
+      "conditioning": [
+        "39",
+        0
+      ]
+    }
+  },
+  "48": {
+    "class_type": "Flux2Scheduler",
+    "inputs": {
+      "steps": 8,
+      "width": 1280,
+      "height": 768
+    }
+  },
+  "13": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "25",
+        0
+      ],
+      "guider": [
+        "22",
+        0
+      ],
+      "sampler": [
+        "16",
+        0
+      ],
+      "sigmas": [
+        "48",
+        0
+      ],
+      "latent_image": [
+        "47",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "13",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "mcl/flux2dev"
+    }
+  }
+}
