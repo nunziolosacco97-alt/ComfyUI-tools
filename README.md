@@ -23,7 +23,7 @@ Sono i grafi esatti dei test con seed 7. I file dei modelli (nomi nei nodi `UNET
 python tools/run_workflow.py workflows/1_z_image_turbo_depth.json 101
 ```
 
-Gli script in `scripts/comfy/` sono la versione Python dei workflow (uno per modello, `cx.py` è l’helper). Variabili: `COMFY_SHARED` (cartella ComfyUI-Shared), `INF` (sottocartella di input, default `mcl3`). Con `DUMP_DIR=cartella` gli script esportano il JSON senza eseguirlo.
+Gli script in `scripts/comfy/` (compresi `flux2_dev_v9.py`, `moss_v9.py`, `run_seeds2.sh`/`run_seeds3.sh` del lotto a 3 seed) sono la versione Python dei workflow (uno per modello, `cx.py` è l’helper). Variabili: `COMFY_SHARED` (cartella ComfyUI-Shared), `INF` (sottocartella di input, default `mcl3`). Con `DUMP_DIR=cartella` gli script esportano il JSON senza eseguirlo.
 
 ## Resto del repository
 
@@ -33,4 +33,4 @@ Gli script in `scripts/comfy/` sono la versione Python dei workflow (uno per mod
 
 ## Prossimi passi
 
-Scelta del vincitore con 3 seed per modello, armonizzazione auto/ambiente, poi LTX SDR→HDR per l’EXR 16 bit lineare.
+Test a 3 seed completato (FLUX.2 e MOSS in testa, vedi `docs/modelli.md`). Restano: armonizzazione auto/ambiente, poi LTX SDR→HDR per l’EXR 16 bit lineare.
