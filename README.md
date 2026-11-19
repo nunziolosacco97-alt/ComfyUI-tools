@@ -33,4 +33,4 @@ Gli script in `scripts/comfy/` (compresi `flux2_dev_v9.py`, `moss_v9.py`, `run_s
 
 ## Prossimi passi
 
-Test a 3 seed completato (FLUX.2 e MOSS in testa, vedi `docs/modelli.md`). Restano: armonizzazione auto/ambiente, poi LTX SDR→HDR per l’EXR 16 bit lineare.
+Test a 3 seed completato, poi secondo giro con la ricetta v10 (vedi `docs/modelli.md`): MOSS v10 (fine 1.0) e H3 D/E in testa. Restano: armonizzazione auto/ambiente, poi LTX SDR→HDR per l’EXR 16 bit lineare.
