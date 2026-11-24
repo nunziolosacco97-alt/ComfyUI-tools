@@ -1,6 +1,6 @@
 """Tiny ComfyUI API helper for the model bench. Inputs live in ComfyUI-Shared/input/mcl/, outputs go to ComfyUI-Shared/output/mcl/."""
 import json, time, urllib.request, uuid, os, shutil
-API = "http://127.0.0.1:8188"; SH = os.environ.get("COMFY_SHARED", r"PATH/TO/ComfyUI-Shared")
+API = "http://127.0.0.1:8188"; SH = r"C:\Users\Internet\AppData\Local\Comfy-Desktop\ComfyUI-Shared"
 HERE = os.path.dirname(os.path.abspath(__file__)); INF = os.environ.get("INF", "mcl3"); RES = os.path.join(HERE, "results"); os.makedirs(RES, exist_ok=True)
 PROMPT = ("Photorealistic automotive advertising photograph: a papaya orange McLaren 765LT supercar parked on a dark asphalt road in front of a monumental "
           "modern stone colonnade building with exactly three tall square stone columns standing on low plinths and supporting one continuous heavy cornice, dark glazed shopfronts recessed behind the columns. A raised light stone sidewalk runs continuously along the whole foreground, separated from the road by one continuous straight kerb, and another sidewalk runs along the building behind the car. Low warm late-afternoon sun from behind-left casting long hard "

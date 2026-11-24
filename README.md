@@ -34,3 +34,12 @@ Gli script in `scripts/comfy/` (compresi `flux2_dev_v9.py`, `moss_v9.py`, `run_s
 ## Prossimi passi
 
 Test a 3 seed completato, poi secondo giro con la ricetta v10 (vedi `docs/modelli.md`): MOSS v10 (fine 1.0) e H3 D/E in testa. Restano: armonizzazione auto/ambiente, poi LTX SDR→HDR per l’EXR 16 bit lineare.
+
+## Render 4K nel grafo (senza upscaler esterno)
+
+`scripts/comfy/hr_gen.py MODELLO SCENA VISTA MODO [denoise] [seed]` rifà il render a 3840x2304 dentro il grafo del modello: l'originale 1280x768 è ingrandito (lanczos), codificato con VAE a tile e rielaborato con denoise parziale (0.4) dallo stesso modello. Profondità, clay e colore sono ridimensionati, mai presi da un altro modello. Modi: `g` (passata globale) e `t` (tile sovrapposte, fusione con rampe lineari). Strategia usata: tile per Z-Image, MOSS, H3 e FLUX.2; globale per P-H3 (FLUX.2 globale manda in crash ComfyUI su 16 GB).
+
+- `run_hr_all.sh` lancia tutte le viste (McLaren A, B, C; Hummer 1-4), `wait_view.sh` e `sheet_hr.py` costruiscono i fogli di confronto.
+- `trk_gen.py` / `hum_gen.py`: generatori dei grafi per la pista McLaren e per l'Hummer in montagna; `stage_*.py` preparano gli input.
+- Tempi per immagine: Z-Image 6 min, P-H3 3,5, MOSS 18, H3 17, FLUX.2 27.
+- `docs/risultati_4k/`: fogli di confronto (originale | 4K | ritagli al 100%) e fogli degli originali. Le immagini a piena risoluzione non sono nel repository.
