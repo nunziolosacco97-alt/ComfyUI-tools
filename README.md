@@ -43,3 +43,10 @@ Test a 3 seed completato, poi secondo giro con la ricetta v10 (vedi `docs/modell
 - `trk_gen.py` / `hum_gen.py`: generatori dei grafi per la pista McLaren e per l'Hummer in montagna; `stage_*.py` preparano gli input.
 - Tempi per immagine: Z-Image 6 min, P-H3 3,5, MOSS 18, H3 17, FLUX.2 27.
 - `docs/risultati_4k/`: fogli di confronto (originale | 4K | ritagli al 100%) e fogli degli originali. Le immagini a piena risoluzione non sono nel repository.
+
+## Scena città (McLaren con la donna) e prove di denoise
+
+- Scena `city` in `hr_gen.py` (input `mcl13`, ricette v10, seed 101/202/303): `sheet_city.py`, `run_hr_city.sh`, `run_city_seeds.sh SEED...`.
+- Denoise 4K scelti: Z-Image, H3 e P-H3 a 0.25; MOSS e FLUX.2 a 0.4 (a 0.25 MOSS perde nitidezza sul volto, FLUX.2 resta uguale). Confronti in `docs/risultati_4k/den_*_city.jpg` (`cmp_den.py`) e `d25_*_tutte.jpg` (`sheet_d25.py`, `run_d25.sh`, `run_d_test.sh`).
+- SenseNova U1.6 (8B, Apache 2.0, nodi nativi ComfyUI): `sensenova_v10.py SEED L|N [refs] [W H] [tex]`, riferimenti clay + colore Blender. Confronto in `docs/risultati_4k/sensenova_confronto.jpg`: bello ma poco fedele al layout, auto "di pongo"; prove a risoluzione più alta e prompt di texture in `run_sn_test.sh` (da eseguire).
+- Nota: un job FLUX.2 può bloccare ComfyUI senza errore; serve un timeout per tile.

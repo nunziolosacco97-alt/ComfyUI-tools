@@ -6,7 +6,7 @@ import av
 from PIL import Image
 seed = int(sys.argv[1]) if len(sys.argv) > 1 else 7
 W_, H_, N_ = 1600, 960, 9
-MC = os.path.dirname(HERE); SCR = os.environ.get("LTX_SCRIPTS", "scripts")
+MC = os.path.dirname(HERE); SCR = r"C:\Users\Internet\Desktop\TEST COMFYUI\scripts"
 clay = Image.open(os.path.join(MC, "inputs", "beauty_clay.png")).convert("RGB").resize((W_, H_), Image.LANCZOS)
 name = "layout_mclaren_s%d.mp4" % seed
 c = av.open(os.path.join(SH, "input", name), "w"); st = c.add_stream("libx264", rate=24); st.width, st.height, st.pix_fmt = W_, H_, "yuv420p"; st.options = {"crf": "8"}

@@ -11,17 +11,23 @@ model, SCENE, VIEW, MODE = sys.argv[1:5]
 DEN = float(sys.argv[5]) if len(sys.argv) > 5 else 0.35
 seed = int(sys.argv[6]) if len(sys.argv) > 6 else 101
 HERE = os.path.dirname(os.path.abspath(__file__)); PY = sys.executable
-INF = ("trk_" if SCENE == "trk" else "hum_") + VIEW
+INF = "mcl13" if SCENE == "city" else ("trk_" if SCENE == "trk" else "hum_") + VIEW   # city = McLaren with the woman walking past (inputs mcl13)
 FW, FH = 3840, 2304
-ORIG = os.path.join(RES, "%s_%s_%s_s%d_nf_0.png" % (SCENE, model, VIEW, seed))
+CITY_ORIG = {"zimage": "zimage_v10_depth_s%d_d0.8_e0.8_l0_0.png", "flux": "flux2dev_v10A_turbo_s%d_0.png", "moss": "moss_v10_depth_color_end1_s%d_0.png",
+             "ph3": "ph3image_v10A_s%d_0.png", "h3": "h3image_v7B_2ref_s%d_0.png"}   # city scene: v10 recipes; H3 = 2nd ref is Blender beauty_color (no other model's output)
+CITY_DUMP = {"zimage": "zimage_v10_depth_s%d_d0.8_e0.8_l0", "flux": "flux2dev_v10A_turbo_s%d", "moss": "moss_v10_depth_color_end1_s%d", "ph3": "ph3image_v10A_s%d", "h3": "h3image_v10A_2ref_s%d"}
+ORIG = os.path.join(RES, (CITY_ORIG[model] % seed) if SCENE == "city" else "%s_%s_%s_s%d_nf_0.png" % (SCENE, model, VIEW, seed))
 TAGN = "d%02d" % round(DEN * 100)
 OUTN = "hr%s_%s_%s_%s_s%d_%s" % (MODE, SCENE, model, VIEW, seed, TAGN)
 os.makedirs(os.path.join(RES, "HR"), exist_ok=True)
 # 1) original graph of this model/view (dumped, not run)
 dd = os.path.join(HERE, "dump"); os.makedirs(dd, exist_ok=True)
-env = dict(os.environ, DUMP_DIR=dd, TAG="_nf")
-subprocess.run([PY, "-I", os.path.join(HERE, "trk_gen.py" if SCENE == "trk" else "hum_gen.py"), model, VIEW, str(seed)], env=env, check=True, capture_output=True)
-G0 = json.load(open(os.path.join(dd, "%s_%s_%s_s%d_nf.json" % (SCENE, model, VIEW, seed)), encoding="utf-8"))
+if SCENE == "city":   # graphs dumped beforehand from the *_v10.py scripts with INF=mcl13 DUMP_DIR=dump/city
+    G0 = json.load(open(os.path.join(dd, "city", (CITY_DUMP[model] % seed) + ".json"), encoding="utf-8"))
+else:
+    env = dict(os.environ, DUMP_DIR=dd, TAG="_nf")
+    subprocess.run([PY, "-I", os.path.join(HERE, "trk_gen.py" if SCENE == "trk" else "hum_gen.py"), model, VIEW, str(seed)], env=env, check=True, capture_output=True)
+    G0 = json.load(open(os.path.join(dd, "%s_%s_%s_s%d_nf.json" % (SCENE, model, VIEW, seed)), encoding="utf-8"))
 VAE = {"zimage": "3", "moss": "4", "flux": "10", "ph3": "3", "h3": "3"}[model]
 DEC = {"zimage": "12", "moss": "9", "flux": "8", "ph3": "15", "h3": "9"}[model]
 SAVE = {"zimage": "13", "moss": "85", "flux": "9", "ph3": "16", "h3": "10"}[model]
@@ -30,7 +36,7 @@ IMGS = {k: Image.open(os.path.join(SRC, k + ".png")).convert("RGB") for k in ("b
 INIT = Image.open(ORIG).convert("RGB")
 UP = {k: v.resize((FW, FH), Image.LANCZOS) for k, v in IMGS.items()}; UP["init"] = INIT.resize((FW, FH), Image.LANCZOS)
 STAGE = os.path.join(SH, "input", "hr_stage"); os.makedirs(STAGE, exist_ok=True)
-SIG = {"ph3": {0.35: "0.881923, 0.810083, 0.528718, 0.0", 0.5: "0.951688, 0.925372, 0.881923, 0.810083, 0.528718, 0.0"}}
+SIG = {"ph3": {0.25: "0.810083, 0.528718, 0.0", 0.35: "0.881923, 0.810083, 0.528718, 0.0", 0.5: "0.951688, 0.925372, 0.881923, 0.810083, 0.528718, 0.0"}}
 
 def build(files, W, H):
     """patch the dumped graph: working size WxH, input images renamed to files[k], start from files['init'] with partial denoise"""
@@ -59,7 +65,7 @@ def build(files, W, H):
         g["13"]["inputs"].update(sigmas=["SS", 1], latent_image=["H3", 0])
     elif model == "ph3":
         g["9"]["inputs"].update(width=W, height=H)
-        g["13"]["inputs"]["sigmas"] = SIG["ph3"][0.35 if DEN < 0.45 else 0.5]
+        g["13"]["inputs"]["sigmas"] = SIG["ph3"][0.25 if DEN < 0.3 else 0.35 if DEN < 0.45 else 0.5]
         g["SA"] = {"class_type": "LTXVSeparateAVLatent", "inputs": {"av_latent": ["9", 1]}}      # P-H3 samples a video+audio latent: keep its empty audio part
         g["CA"] = {"class_type": "LTXVConcatAVLatent", "inputs": {"video_latent": ["H3", 0], "audio_latent": ["SA", 1]}}
         g["14"]["inputs"]["latent_image"] = ["CA", 0]
