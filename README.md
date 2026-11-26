@@ -50,3 +50,7 @@ Test a 3 seed completato, poi secondo giro con la ricetta v10 (vedi `docs/modell
 - Denoise 4K scelti: Z-Image, H3 e P-H3 a 0.25; MOSS e FLUX.2 a 0.4 (a 0.25 MOSS perde nitidezza sul volto, FLUX.2 resta uguale). Confronti in `docs/risultati_4k/den_*_city.jpg` (`cmp_den.py`) e `d25_*_tutte.jpg` (`sheet_d25.py`, `run_d25.sh`, `run_d_test.sh`).
 - SenseNova U1.6 (8B, Apache 2.0, nodi nativi ComfyUI): `sensenova_v10.py SEED L|N [refs] [W H] [tex]`, riferimenti clay + colore Blender. Confronto in `docs/risultati_4k/sensenova_confronto.jpg`: bello ma poco fedele al layout, auto "di pongo"; prove a risoluzione più alta e prompt di texture in `run_sn_test.sh` (da eseguire).
 - Nota: un job FLUX.2 può bloccare ComfyUI senza errore; serve un timeout per tile.
+
+## PC A (Nano Banana)
+
+La cartella `pc_a/` allinea il secondo PC: briefing in `pc_a/PC_A_LEGGIMI.md`, testo da incollare nella chat in `pc_a/PROMPT_PER_CHAT_PC_A.md`, script autonomo `pc_a/nanobanana.py` (legge la chiave solo da `GEMINI_API_KEY`), le passate Blender di 8 scene in `pc_a/scenes/`, la scena demo in `pc_a/blender_demo/` e i risultati degli altri modelli in `pc_a/results/`.
